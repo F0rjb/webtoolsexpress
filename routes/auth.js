@@ -17,7 +17,12 @@ router.post("/register", async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({ email, password: hashedPassword });
     await newUser.save();
-    res.status(201).json({ message: "User registered successfully" });
+
+    const token = jwt.sign({ id: newUser._id }, "your-secret-key");
+
+    res
+      .status(201)
+      .json({ token: token, message: "User registered successfully" });
   } catch (error) {
     console.error("Error during registration:", error);
     res.status(404).json({ message: "Internal server error" });

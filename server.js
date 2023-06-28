@@ -2,8 +2,6 @@ const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
 
-var morgan = require("morgan");
-
 // Connect to MongoDB using Mongoose
 mongoose
   .connect("mongodb://admin:secret@localhost:27017/webtools", {
@@ -23,8 +21,10 @@ const authRoutes = require("./routes/auth");
 
 // Use the auth routes
 app.use("/api/auth", authRoutes);
+// Handler Route
 
-// Add more routes as needed
+const handlerRouter = require("./routes/apiHandlers");
+app.use("/api/convert", handlerRouter);
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);

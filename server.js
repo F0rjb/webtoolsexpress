@@ -25,6 +25,8 @@ app.use("/api/auth", authRoutes);
 
 const handlerRouter = require("./routes/apiHandlers");
 app.use("/api/convert", handlerRouter);
+//Bulk Add of fn
+// require("./BulkInjection");
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);

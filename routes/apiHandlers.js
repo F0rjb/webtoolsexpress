@@ -8,7 +8,7 @@ const functionString = `
 `;
 
 // POST route to handle the request
-router.post("/convert", async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const input = req.body.input; // Assuming the input is sent as { "input": "some input value" }
 

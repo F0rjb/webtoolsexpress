@@ -32,14 +32,13 @@ router.post("/edit/:id", async (req, res) => {
   try {
     const input = req.body.input; // Assuming the input is sent as { "input": "some input value" }
     const functionId = req.params.id;
-    // Retrieve the function string from the MongoDB collection
 
-    if (await Function.findOne({ _id: functionId })) {
-      const updated = await Function.findOneAndUpdate(
+    if (await Function.exists({ _id: functionId })) {
+      await Function.findOneAndUpdate(
         { _id: functionId },
-        input
+        { $set: { input: input } }
       );
-      res.send(updated);
+      res.send(input);
     } else {
       res.status(404).send("Function doesn't exist");
     }

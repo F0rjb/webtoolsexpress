@@ -24,7 +24,7 @@ app.use("/api/auth", authRoutes);
 // Handler Route
 
 const handlerRouter = require("./routes/apiHandlers");
-app.use("/api/convert", handlerRouter);
+app.use("/api/", handlerRouter);
 //Bulk Add of fn
 // require("./BulkInjection");
 

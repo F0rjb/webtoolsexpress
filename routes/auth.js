@@ -9,20 +9,20 @@ const router = express.Router();
 // User registration
 router.post("/register", async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, role } = req.body;
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ email, password: hashedPassword });
+    const newUser = new User({ email, password: hashedPassword, role });
     await newUser.save();
 
     const token = jwt.sign({ id: newUser._id }, "your-secret-key");
 
     res
       .status(201)
-      .json({ token: token, message: "User registered successfully" });
+      .json({ token: token, message: role + " registered successfully" });
   } catch (error) {
     console.error("Error during registration:", error);
     res.status(404).json({ message: "Internal server error" });

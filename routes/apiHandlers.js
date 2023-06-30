@@ -1,7 +1,7 @@
 // POST route to handle the request
 const express = require("express");
 const Function = require("../models/Functions");
-const authenticateJWT = require("../config/authenticate");
+const { authenticateJWT, isAdmin } = require("../config/authenticate");
 const router = express.Router();
 
 //Post REQUEST to handle Adding the api's
@@ -75,12 +75,12 @@ router.post("/:id", async (req, res) => {
 });
 
 // Delete request the deletes a fn by it's param id
-router.delete("/delete/:id", authenticateJWT, async (req, res) => {
+router.delete("/delete/:id", authenticateJWT, isAdmin, async (req, res) => {
   const functionId = req.params.id;
   // finding the fn and deleting
   try {
-    if (!(await Function.findById(functionId))) {
-      res.status(400).send("Function unexistant");
+    if (!Function.findById(functionId)) {
+      res.status(401).send("Function unexistant");
     } else {
       await Function.findByIdAndRemove(functionId).then(
         res.send("Function deleted successfully")

@@ -29,18 +29,20 @@ router.post("/add", async (req, res) => {
 });
 // Post Request that will handle modifications on a function
 router.post("/edit/:id", async (req, res) => {
+  const input = req.body; // Assuming the input is sent as { "input": "some input value" }
+  const functionId = req.params.id;
+  console.log(functionId, input);
   try {
-    const input = req.body.input; // Assuming the input is sent as { "input": "some input value" }
-    const functionId = req.params.id;
-
-    if (await Function.exists({ _id: functionId })) {
-      await Function.findOneAndUpdate(
-        { _id: functionId },
-        { $set: { input: input } }
-      );
-      res.send(input);
-    } else {
+    if (!(await Function.findById(functionId))) {
       res.status(404).send("Function doesn't exist");
+    } else {
+      try {
+        await Function.findOneAndUpdate({ _id: functionId }, input).then(
+          res.send(input)
+        );
+      } catch (error) {
+        console.log(error.message);
+      }
     }
   } catch (error) {
     console.error("Error:", error);
@@ -68,6 +70,24 @@ router.post("/:id", async (req, res) => {
   } catch (error) {
     console.error("Error:", error);
     res.status(500).json({ error: "An error occurred" });
+  }
+});
+
+// Delete request the deletes a fn by it's param id
+router.delete("/delete/:id", async (req, res) => {
+  const functionId = req.params.id;
+  // finding the fn and deleting
+  try {
+    if (!(await Function.findById(functionId))) {
+      res.status(400).send("Function unexistant");
+    } else {
+      await Function.findByIdAndRemove(functionId).then(
+        res.send("Function deleted successfully")
+      );
+    }
+  } catch (error) {
+    console.log(error.message);
+    res.send(error.message);
   }
 });
 

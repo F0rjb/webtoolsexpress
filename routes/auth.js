@@ -74,7 +74,7 @@ router.post("/admin/register", async (req, res) => {
 // Protected route example
 router.get(
   "/protected",
-  passport.authenticate("jwt", { session: false }),
+  passport.authenticate("jwt", { session: true }),
   (req, res) => {
     res.json({ message: "Protected route accessed successfully" });
   }

@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
+    "test:db:up": "docker network create test-network && docker run -d --rm --name test-mongodb --network test-network -p 27017:27017 -v ./data:/data/db mongo",
+    "test:db:down": "docker stop test-mongodb && docker network rm test-network",
+    "test:run": "set MONGO_URL=mongodb://localhost:27018 && npm run test"
+,
     "dev": "nodemon server.js"
   },
   "keywords": [],
@@ -27,6 +31,7 @@
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "jest": "^29.5.0",
+    "mongodb-memory-server": "^8.13.0",
     "superagent": "^8.0.9",
     "supertest": "^6.3.3"
   }

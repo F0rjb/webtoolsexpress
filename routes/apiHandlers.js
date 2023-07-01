@@ -30,7 +30,7 @@ router.post("/add", authenticateJWT, isAdmin, async (req, res) => {
 });
 // Post Request that will handle modifications on a function
 router.put("/edit/:id", authenticateJWT, isAdmin, async (req, res) => {
-  const input = req.body; // Assuming the input is sent as { "input": "some input value" }
+  const input = req.body;
   const functionId = req.params.id;
 
   try {

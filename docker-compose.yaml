@@ -25,5 +25,15 @@ services:
       - ME_CONFIG_BASICAUTH_PASSWORD=secret
     depends_on:
       - mongodb
-
+      
+  mongodb-test:
+    image: mongo
+    restart: always
+    ports:
+      - 27018:27017  # Change the port to 27018
+    volumes:
+      - ./data-test:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=secret
  

@@ -12,8 +12,9 @@ const functionSchema = new mongoose.Schema({
 });
 
 // Define the pre-save middleware to increment timesModified
-functionSchema.pre("findOneAndUpdate", function (next) {
-  this.timesModified += 1;
+functionSchema.pre(/^findOneAndUpdate$/, function (next) {
+  this._update.$inc = this._update.$inc || {};
+  this._update.$inc.timesModified = 1;
   next();
 });
 // Create the Function model

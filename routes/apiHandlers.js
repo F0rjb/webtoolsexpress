@@ -38,7 +38,7 @@ router.put("/edit/:id", authenticateJWT, isAdmin, async (req, res) => {
       res.status(404).send("Function doesn't exist");
     } else {
       try {
-        await Function.findOneAndUpdate({ _id: functionId }, { input }).then(
+        await Function.findOneAndUpdate({ _id: functionId }, input).then(
           res.send(input)
         );
       } catch (error) {

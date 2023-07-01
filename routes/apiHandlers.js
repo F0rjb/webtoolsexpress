@@ -5,7 +5,7 @@ const { authenticateJWT, isAdmin } = require("../config/authenticate");
 const router = express.Router();
 
 //Post REQUEST to handle Adding the api's
-router.post("/add", async (req, res) => {
+router.post("/add", authenticateJWT, isAdmin, async (req, res) => {
   try {
     const { name, kind, inputType, outputType, functionString } = req.body;
     if (await Function.findOne({ name: name })) {
@@ -29,16 +29,16 @@ router.post("/add", async (req, res) => {
   }
 });
 // Post Request that will handle modifications on a function
-router.post("/edit/:id", async (req, res) => {
+router.put("/edit/:id", authenticateJWT, isAdmin, async (req, res) => {
   const input = req.body; // Assuming the input is sent as { "input": "some input value" }
   const functionId = req.params.id;
-  console.log(functionId, input);
+
   try {
     if (!(await Function.findById(functionId))) {
       res.status(404).send("Function doesn't exist");
     } else {
       try {
-        await Function.findOneAndUpdate({ _id: functionId }, input).then(
+        await Function.findOneAndUpdate({ _id: functionId }, { input }).then(
           res.send(input)
         );
       } catch (error) {
@@ -52,7 +52,7 @@ router.post("/edit/:id", async (req, res) => {
 });
 
 // POST route to handle the request
-router.post("/:id", async (req, res) => {
+router.post("/:id", authenticateJWT, isAdmin, async (req, res) => {
   try {
     const input = req.body.input; // Assuming the input is sent as { "input": "some input value" }
     const functionId = req.params.id;

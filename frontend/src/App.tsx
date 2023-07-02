@@ -1,25 +1,52 @@
-import "./App.css";
-import Navbar from "./components/layouts/Navbar";
-import Sidebar from "./components/Sidebar";
-import Footer from "./components/layouts/Footer";
-import { Route, Routes } from "react-router-dom";
-import Login from "./components/Login";
-import "bootstrap/dist/css/bootstrap.min.css";
-import Register from "./components/Register";
+import logo from "./logo.svg"
+import "./App.css"
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
+import Auth from "./components/pages/Auth"
+import Dashboard from "./components/pages/Dashboard"
+import "react-toastify/dist/ReactToastify.css"
+import { ToastContainer } from "react-toastify"
+import { useAppDispatch } from "./app/hooks"
+import { useEffect } from "react"
+import { setUser } from "./features/authSlice"
+import PrivateRoute from "./components/PrivateRoute"
+import Products from "./components/pages/Products"
+import Navbar from "./components/Navbar"
 
 function App() {
+  const dispatch = useAppDispatch()
+  const user = JSON.parse(localStorage.getItem("user") || "{}")
+  useEffect(() => {
+    dispatch(setUser(user))
+  }, [])
+
   return (
-    <>
-      <Navbar />
-      <Sidebar />
-      <Footer />
-      <Routes>
-        <Route path="/" />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-      </Routes>
-    </>
-  );
+    <div className="App">
+      <BrowserRouter>
+        <ToastContainer />
+        <Routes>
+          <Route path="/" element={<Navigate to="/auth" replace />} />
+          <Route path="/auth" element={<Auth />} />
+
+          <Route
+            path="/dashboard"
+            element={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/products"
+            element={
+              <PrivateRoute>
+                <Products />
+              </PrivateRoute>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
+    </div>
+  )
 }
 
-export default App;
+export default App

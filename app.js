@@ -29,6 +29,6 @@ app.use("/api/auth", authRoutes);
 const handlerRouter = require("./routes/apiHandlers");
 app.use("/api/", handlerRouter);
 //Bulk Add of fn
-// require("./BulkInjection");
+//require("./BulkInjection");
 
 module.exports = app;

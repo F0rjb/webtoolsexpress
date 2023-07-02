@@ -11,7 +11,7 @@ interface Products {}
 
 export const authApi = createApi({
   reducerPath: "authApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000/api/auth" }),
+  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:2000/api/auth" }),
   endpoints: (builder) => ({
     loginUser: builder.mutation({
       query: (body: { email: String; password: String }) => {

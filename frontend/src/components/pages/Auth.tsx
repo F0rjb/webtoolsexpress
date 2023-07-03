@@ -8,17 +8,25 @@ import {
 import { toast } from "react-toastify"
 import { useAppDispatch } from "../../app/hooks"
 import { setUser } from "../../features/authSlice"
-const initialState = { name: "", password: "", email: "", confirmPassword: "" }
-const Auth = () => {
-  const [FormValue, setFormValue] = useState(initialState)
-  const { name, email, password, confirmPassword } = FormValue
-  const [showRegister, setshowRegister] = useState(false)
-  const dispatch = useAppDispatch()
 
+const initialState = {
+  name: "",
+  password: "",
+  email: "",
+  confirmPassword: "",
+}
+
+const Auth = () => {
+  const [formValue, setFormValue] = useState(initialState)
+  const { name, email, password, confirmPassword } = formValue
+  const [showRegister, setShowRegister] = useState(false)
+  const dispatch = useAppDispatch()
   const navigate = useNavigate()
+
   const handleChange = (e: any) => {
-    setFormValue({ ...FormValue, [e.target.name]: e.target.value })
+    setFormValue({ ...formValue, [e.target.name]: e.target.value })
   }
+
   const [
     loginUser,
     {
@@ -28,7 +36,6 @@ const Auth = () => {
       error: loginError,
     },
   ] = useLoginUserMutation()
-
   const [
     registerUser,
     {
@@ -43,41 +50,49 @@ const Auth = () => {
     if (email && password) {
       await loginUser({ email, password })
     } else {
-      toast.error("Please fill all input ")
+      toast.error("Please fill all input")
     }
   }
+
   const handleRegister = async () => {
     if (password !== confirmPassword) {
-      return toast.error("Password do not match ")
+      return toast.error("Password do not match")
     }
-    if (name && email && password) {
-      await registerUser({ name, email, password })
+    if (email && password) {
+      await registerUser({ email, password })
     } else {
-      toast.error("Please fill all input ")
+      toast.error("Please fill all input")
     }
   }
+
   useEffect(() => {
     if (isLoginSuccess) {
       toast.success("User login successfully")
-      dispatch(setUser({ name: loginData.user.name, token: loginData.token }))
+      dispatch(setUser({ token: loginData.token }))
       navigate("/dashboard")
     }
     if (isRegisterSuccess) {
       toast.success("User registered successfully")
-      dispatch(
-        setUser({ name: registerData.user.name, token: registerData.jwt }),
-      )
+      dispatch(setUser({ token: registerData.jwt }))
       navigate("/dashboard")
     }
   }, [isLoginSuccess, isRegisterSuccess])
+
   useEffect(() => {
     try {
-      if (isLoginError) {
-        console.log(loginError)
-        toast.error((loginError as any).data.message)
-      }
       if (isRegisterError) {
-        toast.error((registerError as any).data.message)
+        console.log("registerError:", registerError)
+        if (
+          registerError &&
+          registerError.response &&
+          registerError.response.data &&
+          registerError.response.data.message
+        ) {
+          const { data } = registerError.response
+          toast.error(data.message)
+        } else {
+          toast.error("An error occurred during registration.")
+        }
       }
     } catch (error) {
       console.error(error)

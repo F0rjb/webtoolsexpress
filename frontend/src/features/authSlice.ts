@@ -10,23 +10,20 @@ export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setUser: (
-      state,
-      action: PayloadAction<{ name: string; token: string }>,
-    ) => {
+    setUser: (state, action: PayloadAction<{ token: string }>) => {
       localStorage.setItem(
         "user",
         JSON.stringify({
-          name: action.payload.name,
+          // name: action.payload.name,
           token: action.payload.token,
         }),
       )
-      state.name = action.payload.name
+      // state.name = action.payload.name
 
       state.token = action.payload.token
       console.log(
         "Saved user in local storage:",
-        action.payload.name,
+        // action.payload.name,
         action.payload.token,
       )
     },

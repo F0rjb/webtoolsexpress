@@ -21,12 +21,14 @@ router.post("/register", async (req, res) => {
 
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
 
-    res
+    return res
       .status(201)
       .json({ token: token, message: role + " registered successfully" });
   } catch (error) {
     console.error("Error during registration:", error);
-    res.status(404).json({ message: "Internal server error" });
+    return res
+      .status(500)
+      .json({ message: "An error occurred during registration." });
   }
 });
 

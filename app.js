@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const express = require("express");
 const app = express();
+const cors = require("cors");
+
 require("dotenv").config();
 console.log(process.env.PORT);
 
@@ -30,5 +32,6 @@ const handlerRouter = require("./routes/apiHandlers");
 app.use("/api/", handlerRouter);
 //Bulk Add of fn
 //require("./BulkInjection");
+app.use(cors());
 
 module.exports = app;
